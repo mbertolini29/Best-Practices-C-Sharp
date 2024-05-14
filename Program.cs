@@ -42,8 +42,8 @@ namespace ToDo
             Console.WriteLine("4. Salir");
 
             // Read line
-            string line = Console.ReadLine();
-            return Convert.ToInt32(line);
+            string lineToShow = Console.ReadLine();
+            return Convert.ToInt32(lineToShow);
         }
 
         public static void ShowMenuRemove()
@@ -58,16 +58,16 @@ namespace ToDo
                 }
                 Console.WriteLine("----------------------------------------");
 
-                string line = Console.ReadLine();
+                string lineToRemove = Console.ReadLine();
                 // Remove one position
-                int indexToRemove = Convert.ToInt32(line) - 1;
+                int indexToRemove = Convert.ToInt32(lineToRemove) - 1;
                 if (indexToRemove > -1)
                 {
                     if (TaskList.Count > 0)
                     {
-                        string task = TaskList[indexToRemove];
+                        string taskRemove = TaskList[indexToRemove];
                         TaskList.RemoveAt(indexToRemove);
-                        Console.WriteLine("Tarea " + task + " eliminada");
+                        Console.WriteLine("Tarea " + taskRemove + " eliminada");
                     }
                 }
             }
@@ -81,8 +81,8 @@ namespace ToDo
             try
             {
                 Console.WriteLine("Ingrese el nombre de la tarea: ");
-                string task = Console.ReadLine();
-                TaskList.Add(task);
+                string addTask = Console.ReadLine();
+                TaskList.Add(addTask);
                 Console.WriteLine("Tarea registrada");
             }
             catch (Exception)
