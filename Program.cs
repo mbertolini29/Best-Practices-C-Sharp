@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace ToDo
 {
@@ -26,6 +27,9 @@ namespace ToDo
                 {
                     ShowMenuTaskList();
                 }
+                else{
+                    Console.WriteLine("Opcion incorrecta.");
+                }
             } while ((Menu)menuSelected != Menu.Exit);
         }
         /// <summary>
@@ -40,10 +44,19 @@ namespace ToDo
             Console.WriteLine("2. Remover tarea");
             Console.WriteLine("3. Tareas pendientes");
             Console.WriteLine("4. Salir");
+            Console.WriteLine("----------------------------------------");
 
             // Read line
-            string lineToShow = Console.ReadLine();
-            return Convert.ToInt32(lineToShow);
+            try
+            {
+                string selectedMenu = Console.ReadLine();
+                return Convert.ToInt32(selectedMenu);
+            }
+            catch(Exception)
+            {
+                Console.WriteLine("Opción incorrecta. Seleccione una opción del menú.");
+                return -1;
+            }                    
         }
 
         public static void ShowMenuRemove()
@@ -51,25 +64,30 @@ namespace ToDo
             try
             {
                 Console.WriteLine("Ingrese el número de la tarea a remover: ");
-                // Show current taks
+                
                 ShowCurrentTasks();
                 //ShowMenuTaskList();
 
-                string lineToRemove = Console.ReadLine();
+                string taskNumberToDelete = Console.ReadLine();
+                
                 // Remove one position
-                int indexToRemove = Convert.ToInt32(lineToRemove) - 1;
-                if (indexToRemove > -1)
+                int indexToRemove = Convert.ToInt32(taskNumberToDelete) - 1;
+                
+                if(indexToRemove > (TaskList.Count - 1) || indexToRemove < 0) 
+                    Console.WriteLine("El numero de tarea seleccionado no es valido");
+                else
                 {
-                    if (TaskList.Count > 0)
+                    if (indexToRemove > -1 && TaskList.Count > 0)
                     {
                         string taskRemove = TaskList[indexToRemove];
                         TaskList.RemoveAt(indexToRemove);
-                        Console.WriteLine("Tarea " + taskRemove + " eliminada");
+                        Console.WriteLine($"Tarea {taskRemove} eliminada");
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception) //--> si presiona el numero incorrecto..
             {
+                Console.WriteLine("Ha ocurrido un error al eliminar la tarea");
             }
         }
 
@@ -79,11 +97,21 @@ namespace ToDo
             {
                 Console.WriteLine("Ingrese el nombre de la tarea: ");
                 string addTask = Console.ReadLine();
-                TaskList.Add(addTask);
-                Console.WriteLine("Tarea registrada");
+
+                if(!string.IsNullOrEmpty(addTask))
+                {
+                    TaskList.Add(addTask);
+                    Console.WriteLine("Tarea registrada.");
+                }
+                else{                    
+                    Console.WriteLine("el ingreso no es valido.");
+                    Console.WriteLine("Se requiere el nombre de la tarea.");                
+                }
             }
             catch (Exception)
             {
+                //el error seria que no ingrese nada..
+                Console.WriteLine("Ha ocurrido un error al ingresar la tarea.");
             }
         }
 
@@ -102,10 +130,16 @@ namespace ToDo
         public static void ShowCurrentTasks()
         {
             Console.WriteLine("----------------------------------------");
-            for (int i = 0; i < TaskList.Count; i++)
-            {
-                Console.WriteLine((i + 1) + ". " + TaskList[i]);
-            }
+            Console.WriteLine("Tareas pendientes:");
+
+            var indexTask = 1;
+            TaskList.ForEach(task => Console.WriteLine($"{indexTask++} . {task}"));
+            
+            // for (int i = 0; i < TaskList.Count; i++)
+            // {
+            //     Console.WriteLine((i + 1) + ". " + TaskList[i]);
+            // }
+
             Console.WriteLine("----------------------------------------");
         }
 
